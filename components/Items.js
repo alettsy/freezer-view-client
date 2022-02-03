@@ -1,0 +1,50 @@
+import { TrashIcon } from '@heroicons/react/outline';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { sortedItemsState, itemsState, sortState } from '../atoms/itemsAtoms';
+import Item from './Item';
+
+function Items() {
+	const items = useRecoilValue(itemsState);
+	const [sort, setSort] = useRecoilState(sortState);
+	const sortedList = useRecoilState(sortedItemsState);
+
+	//const filtered = items.filter((item) => item.category == 'Meat');
+
+	return (
+		<div className="sm:px-4 md:px-8">
+			<header className="px-5 py-4">
+				<div className="ml-auto flex items-center justify-between pr-[2.25rem] font-bold md:ml-0">
+					<div className="flex">
+						<p className="w-10 cursor-pointer"></p>
+						<p onClick={() => setSort('ID')} className="w-10 cursor-pointer">
+							ID
+						</p>
+					</div>
+					<p onClick={() => setSort('name')} className="w-40 cursor-pointer">
+						Name
+					</p>
+					<p
+						onClick={() => setSort('category')}
+						className="w-40 cursor-pointer"
+					>
+						Category
+					</p>
+					<p onClick={() => setSort('expiry')} className="w-35 cursor-pointer">
+						Expiry
+					</p>
+				</div>
+			</header>
+			<hr className="md:mx-2" />
+			<div>
+				<div className="flex flex-col space-y-1">
+					{sortedList[0].map((item) => (
+						<Item key={item._id} item={item} />
+					))}
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export default Items;
