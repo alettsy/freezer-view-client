@@ -5,11 +5,9 @@ import { itemsState, itemState } from '../atoms/itemsAtoms';
 import 'react-toastify/dist/ReactToastify.css';
 
 function edit() {
-	const item = useRecoilValue(itemState);
-
-	const [name, setName] = useState(item?.name ?? '');
-	const [category, setCategory] = useState(item?.category ?? 'None');
-	const [expiry, setExpiry] = useState('');
+	const [name, setName] = useState('');
+	const [category, setCategory] = useState('None');
+	const [expiry, setExpiry] = useState(Date.now());
 
 	const [categories, setCategories] = useState([]);
 
@@ -22,12 +20,8 @@ function edit() {
 	}, []);
 
 	useEffect(() => {
-		if (item.expiry) {
-			setExpiry(item.expiry);
-		} else {
-			const todayDate = new Date().toISOString().slice(0, 10);
-			setExpiry(todayDate);
-		}
+		const todayDate = new Date().toISOString().slice(0, 10);
+		setExpiry(todayDate);
 	}, []);
 
 	const onChange = ({ target: { value } }) => {
@@ -40,25 +34,6 @@ function edit() {
 
 	const onCategoryChange = ({ target: { value } }) => {
 		setCategory(value);
-	};
-
-	const submit = () => {
-		if (validate()) {
-			const data = {
-				_id: item._id,
-				name: name,
-				category: category,
-				expiry: expiry,
-			};
-
-			fetch('/api/update_item', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(data),
-			}).then(() => {
-				window.location.href = '/';
-			});
-		}
 	};
 
 	const validate = function () {
@@ -79,9 +54,27 @@ function edit() {
 		return true;
 	};
 
+	const submit = () => {
+		if (validate()) {
+			const data = {
+				name: name,
+				category: category,
+				expiry: expiry,
+			};
+
+			fetch('/api/new_item', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(data),
+			}).then(() => {
+				window.location.href = '/';
+			});
+		}
+	};
+
 	return (
 		<div className="h-screen w-screen overflow-y-scroll bg-gray-900 p-10 text-white scrollbar-hide">
-			<h2 className="pb-5 text-4xl">Edit Item</h2>
+			<h2 className="pb-5 text-4xl">New Item</h2>
 			<div className="max-w-fit">
 				<form className="flex flex-col">
 					<label>Name:</label>
