@@ -1,6 +1,7 @@
 import { atom, selector } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 import { filterState } from './categoryAtoms';
+import { compare } from '../lib/sort';
 
 const { persistAtom } = recoilPersist();
 
@@ -44,13 +45,3 @@ export const sortedItemsState = selector({
 		return items.sort((a, b) => compare(sortBy, a, b));
 	},
 });
-
-function compare(key, a, b) {
-	if (a[key] < b[key]) {
-		return -1;
-	}
-	if (a[key] > b[key]) {
-		return 1;
-	}
-	return 0;
-}

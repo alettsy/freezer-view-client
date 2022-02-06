@@ -2,6 +2,7 @@ import { PencilIcon } from '@heroicons/react/outline';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { categoryState, filterState } from '../atoms/categoryAtoms';
+import { compare } from '../lib/sort';
 
 function Categories() {
 	const setCategory = useSetRecoilState(categoryState);
@@ -13,7 +14,8 @@ function Categories() {
 		fetch('/api/all_cats')
 			.then((response) => response.json())
 			.then((data) => {
-				setCategories(data);
+				const items = data.sort((a, b) => compare('name', a, b));
+				setCategories(items);
 			});
 	}, []);
 
