@@ -3,11 +3,12 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useRecoilValue } from 'recoil';
 import { itemsState, itemState } from '../atoms/itemsAtoms';
 import 'react-toastify/dist/ReactToastify.css';
+import { categoryState } from '../atoms/categoryAtoms';
 
 function edit() {
-	const item = useRecoilValue(itemState);
+	const category = useRecoilValue(categoryState);
 
-	const [name, setName] = useState(item?.name ?? 'None');
+	const [name, setName] = useState(category?.name ?? 'None');
 
 	const onChange = ({ target: { value } }) => {
 		setName(value);
@@ -32,17 +33,26 @@ function edit() {
 	const submit = () => {
 		if (validate()) {
 			const data = {
+				_id: category._id,
 				name: name,
 			};
 
-			// TODO: update doesn't exist yet on server
-			// fetch('/api/new_cat', {
-			// 	method: 'POST',
-			// 	headers: { 'Content-Type': 'application/json' },
-			// 	body: JSON.stringify(data),
-			// }).then(() => {
-			// 	window.location.href = '/';
-			// });
+			fetch('/api/update_cat', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(data),
+			})
+				.then((response) => response.json())
+				.then((body) => {
+					if (body.error) {
+						toast.error(body.error, {
+							position: 'bottom-center',
+							hideProgressBar: true,
+						});
+					} else {
+						window.location.href = '/';
+					}
+				});
 		}
 	};
 
