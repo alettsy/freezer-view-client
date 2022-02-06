@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { itemsState } from '../atoms/itemsAtoms';
+import { itemsState, searchState } from '../atoms/itemsAtoms';
 import Items from './Items';
 import { addDays } from '../lib/date';
 import { getAllItems } from '../lib/service';
@@ -9,12 +9,17 @@ import { filterState } from '../atoms/categoryAtoms';
 function Center() {
 	const [items, setItems] = useRecoilState(itemsState);
 	const setFilterState = useSetRecoilState(filterState);
+	const [search, setSearch] = useRecoilState(searchState);
 
 	useEffect(() => {
 		getAllItems().then((result) => {
 			setItems(result);
 		});
 	}, []);
+
+	const onSearchChange = ({ target: { value } }) => {
+		setSearch(value);
+	};
 
 	return (
 		<div className="h-screen flex-grow overflow-y-scroll bg-gray-900 text-white scrollbar-hide">
@@ -41,6 +46,14 @@ function Center() {
 						value="Clear Filter"
 						className="w-fit cursor-pointer rounded-md bg-gray-800 px-3 py-2 font-bold hover:bg-white hover:text-gray-800"
 						onClick={() => setFilterState(null)}
+					/>
+				</div>
+				<div>
+					<input
+						type="text"
+						value={search}
+						className="hidden w-60 cursor-text rounded-md bg-gray-800 px-3 py-2 hover:bg-white hover:text-gray-800 md:inline"
+						onChange={onSearchChange}
 					/>
 				</div>
 			</header>

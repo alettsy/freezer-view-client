@@ -20,11 +20,17 @@ export const sortState = atom({
 	default: 'ID',
 });
 
+export const searchState = atom({
+	key: 'searchState',
+	default: '',
+});
+
 export const sortedItemsState = selector({
 	key: 'sortedItemsState',
 	get: ({ get }) => {
 		const filterBy = get(filterState);
 		const sortBy = get(sortState);
+		const searchBy = get(searchState);
 		const list = get(itemsState);
 
 		let items = [...list];
@@ -32,6 +38,8 @@ export const sortedItemsState = selector({
 		if (filterBy !== null) {
 			items = items.filter((item) => filterBy === item.category);
 		}
+
+		items = items.filter((item) => item.name.toLowerCase().includes(searchBy));
 
 		return items.sort((a, b) => compare(sortBy, a, b));
 	},
