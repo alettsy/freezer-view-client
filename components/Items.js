@@ -9,28 +9,32 @@ function Items() {
 	const [sort, setSort] = useRecoilState(sortState);
 	const sortedList = useRecoilState(sortedItemsState);
 
-	//const filtered = items.filter((item) => item.category == 'Meat');
-
 	return (
 		<div className="sm:px-4 md:px-8">
-			<header className="px-5 py-4">
-				<div className="ml-auto flex items-center justify-between pr-[2.25rem] font-bold md:ml-0">
-					<div className="flex">
-						<p className="w-10 cursor-pointer"></p>
-						<p onClick={() => setSort('ID')} className="w-10 cursor-pointer">
-							ID
-						</p>
-					</div>
+			<header className="py-4">
+				<div className="ml-auto flex items-center justify-between pr-[2.25rem] pl-4 font-bold md:ml-0 md:pl-10">
+					<p onClick={() => setSort('ID')} className="w-10 cursor-pointer">
+						ID
+					</p>
 					<p onClick={() => setSort('name')} className="w-40 cursor-pointer">
 						Name
 					</p>
 					<p
 						onClick={() => setSort('category')}
-						className="w-40 cursor-pointer"
+						className="w-40 cursor-pointer pl-1"
 					>
 						Category
 					</p>
-					<p onClick={() => setSort('expiry')} className="w-35 cursor-pointer">
+					<p
+						onClick={() => setSort('count')}
+						className="hidden w-10 cursor-pointer pl-1 sm:inline"
+					>
+						Count
+					</p>
+					<p
+						onClick={() => setSort('expiry')}
+						className="w-[6rem] cursor-pointer pl-3"
+					>
 						Expiry
 					</p>
 				</div>

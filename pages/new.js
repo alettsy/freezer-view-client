@@ -8,6 +8,7 @@ function edit() {
 	const [name, setName] = useState('');
 	const [category, setCategory] = useState('None');
 	const [expiry, setExpiry] = useState(Date.now());
+	const [count, setCount] = useState(1);
 
 	const [categories, setCategories] = useState([]);
 
@@ -36,6 +37,10 @@ function edit() {
 		setCategory(value);
 	};
 
+	const onCountChange = ({ target: { value } }) => {
+		setCount(value);
+	};
+
 	const validate = function () {
 		if (name === '') {
 			toast.error('Name cannot be empty', {
@@ -45,6 +50,12 @@ function edit() {
 			return false;
 		} else if (Date.now() > Date.parse(expiry)) {
 			toast.error('Date cannot be in the past', {
+				position: 'bottom-center',
+				hideProgressBar: true,
+			});
+			return false;
+		} else if (count < 1) {
+			toast.error('Count cannot be zero or negative', {
 				position: 'bottom-center',
 				hideProgressBar: true,
 			});
@@ -60,6 +71,7 @@ function edit() {
 				name: name,
 				category: category,
 				expiry: expiry,
+				count: count,
 			};
 
 			fetch('/api/new_item', {
@@ -99,6 +111,15 @@ function edit() {
 							</option>
 						))}
 					</select>
+					<label>Count:</label>
+					<input
+						className="rounded-md text-black"
+						type="number"
+						min="1"
+						name="item_count"
+						value={count}
+						onChange={onCountChange}
+					/>
 					<label>Expiry:</label>
 					<input
 						className="rounded-md text-black"
