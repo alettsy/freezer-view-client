@@ -2,6 +2,7 @@ import { PencilIcon } from '@heroicons/react/outline';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { categoryState, filterState } from '../atoms/categoryAtoms';
+import { getAllCategories } from '../lib/service';
 import { compare } from '../lib/sort';
 
 function Categories() {
@@ -10,14 +11,23 @@ function Categories() {
 
 	const [categories, setCategories] = useState([]);
 
+	const _updateTimer = null;
+
 	useEffect(() => {
-		fetch('/api/all_cats')
-			.then((response) => response.json())
-			.then((data) => {
-				const items = data.sort((a, b) => compare('name', a, b));
-				setCategories(items);
-			});
+		_getCategories();
+		_update();
 	}, []);
+
+	const _getCategories = function () {
+		getAllCategories().then((data) => setCategories(data));
+	};
+
+	const _update = function () {
+		_updateTimer = setTimeout(() => {
+			_getCategories();
+			_update();
+		}, 1000);
+	};
 
 	const editCategory = function (cat) {
 		setCategory(cat);

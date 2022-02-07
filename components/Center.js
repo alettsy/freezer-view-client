@@ -11,11 +11,25 @@ function Center() {
 	const setFilterState = useSetRecoilState(filterState);
 	const [search, setSearch] = useRecoilState(searchState);
 
+	let updateTimer = null;
+
 	useEffect(() => {
+		_getItems();
+		_update();
+	}, []);
+
+	const _getItems = function () {
 		getAllItems().then((result) => {
 			setItems(result);
 		});
-	}, []);
+	};
+
+	const _update = function () {
+		updateTimer = setTimeout(() => {
+			_getItems();
+			_update();
+		}, 1000);
+	};
 
 	const onSearchChange = ({ target: { value } }) => {
 		setSearch(value);
