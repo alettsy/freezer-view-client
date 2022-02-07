@@ -15,6 +15,14 @@ function edit() {
 	};
 
 	const deleteCategory = function () {
+		if (category.name === 'None') {
+			toast.error('Cannot delete the default category', {
+				position: 'bottom-center',
+				hideProgressBar: true,
+			});
+			return;
+		}
+
 		const x = {
 			name: name,
 		};
@@ -59,6 +67,12 @@ function edit() {
 	const validate = function () {
 		if (name === '') {
 			toast.error('Name cannot be empty', {
+				position: 'bottom-center',
+				hideProgressBar: true,
+			});
+			return false;
+		} else if (category.name === 'None') {
+			toast.error('Cannot overwrite the default category', {
 				position: 'bottom-center',
 				hideProgressBar: true,
 			});
