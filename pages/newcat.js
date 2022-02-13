@@ -6,15 +6,21 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function edit() {
 	const [name, setName] = useState('');
+	const [expiry, setExpiry] = useState(0);
 
 	const onChange = ({ target: { value } }) => {
 		setName(value);
+	};
+
+	const onExpiryChange = ({ target: { value } }) => {
+		setExpiry(value);
 	};
 
 	const submit = () => {
 		if (validate()) {
 			const data = {
 				name: name,
+				expiry: expiry,
 			};
 
 			fetch('/api/new_cat', {
@@ -30,6 +36,12 @@ function edit() {
 	const validate = function () {
 		if (name === '') {
 			toast.error('Name cannot be empty', {
+				position: 'bottom-center',
+				hideProgressBar: true,
+			});
+			return false;
+		} else if (parseInt(expiry) < 0) {
+			toast.error('Expiry cannot be smaller than 1 day', {
 				position: 'bottom-center',
 				hideProgressBar: true,
 			});
@@ -51,6 +63,15 @@ function edit() {
 						name="item_name"
 						value={name}
 						onChange={onChange}
+					/>
+					<br />
+					<label>Expiry (in days):</label>
+					<input
+						className="rounded-md text-black"
+						type="number"
+						name="item_expiry"
+						value={expiry}
+						onChange={onExpiryChange}
 					/>
 					<br />
 					<input

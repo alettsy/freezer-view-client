@@ -1,33 +1,12 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { itemsState, itemState } from '../atoms/itemsAtoms';
-import { addDays } from '../lib/date';
-import { TrashIcon } from '@heroicons/react/outline';
-import { getAllItems } from '../lib/service';
+import { useSetRecoilState } from 'recoil';
+import { itemState } from '../atoms/itemsAtoms';
 
 function Item({ item }) {
 	const setSelectedItem = useSetRecoilState(itemState);
-	const setItems = useSetRecoilState(itemsState);
 
 	const onTap = function () {
 		setSelectedItem(item);
 		window.location.href = '/edit';
-	};
-
-	const deleteItem = function () {
-		const x = {
-			_id: item._id,
-		};
-		fetch('/api/delete_item', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(x),
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				getAllItems().then((result) => {
-					setItems(result);
-				});
-			});
 	};
 
 	return (

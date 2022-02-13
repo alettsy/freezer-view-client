@@ -9,9 +9,14 @@ function edit() {
 	const category = useRecoilValue(categoryState);
 
 	const [name, setName] = useState(category?.name ?? 'None');
+	const [expiry, setExpiry] = useState(category?.expiry ?? 0);
 
 	const onChange = ({ target: { value } }) => {
 		setName(value);
+	};
+
+	const onExpiryChange = ({ target: { value } }) => {
+		setExpiry(value);
 	};
 
 	const deleteCategory = function () {
@@ -43,6 +48,7 @@ function edit() {
 			const data = {
 				_id: category._id,
 				name: name,
+				expiry: expiry,
 			};
 
 			fetch('/api/update_cat', {
@@ -77,6 +83,12 @@ function edit() {
 				hideProgressBar: true,
 			});
 			return false;
+		} else if (parseInt(expiry) < 0) {
+			toast.error('Expiry cannot be smaller than 1 day', {
+				position: 'bottom-center',
+				hideProgressBar: true,
+			});
+			return false;
 		}
 
 		return true;
@@ -94,6 +106,15 @@ function edit() {
 						name="item_name"
 						value={name}
 						onChange={onChange}
+					/>
+					<br />
+					<label>Expiry (in days):</label>
+					<input
+						className="rounded-md text-black"
+						type="number"
+						name="item_expiry"
+						value={expiry}
+						onChange={onExpiryChange}
 					/>
 					<br />
 					<div className="flex space-x-2">

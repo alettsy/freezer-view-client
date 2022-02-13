@@ -3,6 +3,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useRecoilValue } from 'recoil';
 import { itemsState, itemState } from '../atoms/itemsAtoms';
 import 'react-toastify/dist/ReactToastify.css';
+import { addDays } from '../lib/date';
 
 function edit() {
 	const [name, setName] = useState('');
@@ -35,6 +36,20 @@ function edit() {
 
 	const onCategoryChange = ({ target: { value } }) => {
 		setCategory(value);
+
+		for (let i in categories) {
+			if (categories[i].name === value) {
+				const expiryDays = categories[i]?.expiry ?? 0;
+				if (expiryDays <= 0) {
+					setExpiry('');
+				} else {
+					const newDate = addDays(Date.now(), parseInt(expiryDays))
+						.toISOString()
+						.slice(0, 10);
+					setExpiry(newDate);
+				}
+			}
+		}
 	};
 
 	const onCountChange = ({ target: { value } }) => {
