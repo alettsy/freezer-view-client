@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
 	const response = await fetch(
-		'http://192.168.1.193:3001/api/categories/update',
+		'http://localhost:3001/api/categories/update',
 		{
 			method: 'POST',
 			headers: {

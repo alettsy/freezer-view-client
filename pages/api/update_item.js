@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-	const response = await fetch('http://192.168.1.193:3001/api/items/update', {
+	const response = await fetch('http://localhost:3001/api/items/update', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
